@@ -1,8 +1,8 @@
-/*  Interrupt-driven Board
+/*  Multiple-Inputs Board
  *  4/3/19
  *  Greg McIntyre
  *  
- *  Interrupt implementation of T1
+ *  Arduino using multiple interrupts
  *  
  *  https://github.com/gregorymcintyre/ProgrammingParadigms.git
  *  
@@ -21,24 +21,26 @@ void setup() {
   pinMode(PIR, INPUT);
   pinMode(SWITCH, INPUT);
 
-  //attachInterrupt(digitalPinToInterrupt(PIR), change, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(PIR), PIRchange, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(SWITCH), ButtonPress, RISING);
+  
 }
 
 void loop() {
-  
-  if(digitalRead(SWITCH)==0){
-    Serial.println("DOWN");
-  }
   delay(1000);
-
-  
   
 }
 
-void change()
+void PIRchange()
 {
   LEDstate = !LEDstate;
   digitalWrite(LED_BUILTIN, LEDstate);
-  Serial.println("Interrupt has occured");
+  Serial.println("Interrupt one has occured");
+  
+}
+
+void ButtonPress(){
+  Serial.println("Interrupt two has occured");
+  
 }
 
