@@ -27,8 +27,6 @@ void setup() {
   TCCR1B &= ~(1<<CS11);   //0
   TCCR1B &= ~(1<<CS10);   //0
 
-
-  
   //reset timer1 set and compare values
   TCNT1 = timer1_load;
   OCR1A = timer1_compare;
