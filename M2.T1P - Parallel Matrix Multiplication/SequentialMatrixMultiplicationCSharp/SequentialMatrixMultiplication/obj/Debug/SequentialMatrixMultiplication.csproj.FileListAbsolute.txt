@@ -1,0 +1,7 @@
+C:\Users\gregm\source\repos\SequentialMatrixMultiplication\SequentialMatrixMultiplication\bin\Debug\SequentialMatrixMultiplication.exe.config
+C:\Users\gregm\source\repos\SequentialMatrixMultiplication\SequentialMatrixMultiplication\bin\Debug\SequentialMatrixMultiplication.exe
+C:\Users\gregm\source\repos\SequentialMatrixMultiplication\SequentialMatrixMultiplication\bin\Debug\SequentialMatrixMultiplication.pdb
+C:\Users\gregm\source\repos\SequentialMatrixMultiplication\SequentialMatrixMultiplication\obj\Debug\SequentialMatrixMultiplication.csprojAssemblyReference.cache
+C:\Users\gregm\source\repos\SequentialMatrixMultiplication\SequentialMatrixMultiplication\obj\Debug\SequentialMatrixMultiplication.csproj.CoreCompileInputs.cache
+C:\Users\gregm\source\repos\SequentialMatrixMultiplication\SequentialMatrixMultiplication\obj\Debug\SequentialMatrixMultiplication.exe
+C:\Users\gregm\source\repos\SequentialMatrixMultiplication\SequentialMatrixMultiplication\obj\Debug\SequentialMatrixMultiplication.pdb

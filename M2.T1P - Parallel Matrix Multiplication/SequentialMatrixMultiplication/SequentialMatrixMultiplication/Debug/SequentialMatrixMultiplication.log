@@ -1,0 +1,4 @@
+﻿  SequentialMatrixMultiplication.cpp
+c:\users\gregm\source\repos\sequentialmatrixmultiplication\sequentialmatrixmultiplication\sequentialmatrixmultiplication.cpp(83): warning C4101: 'start': unreferenced local variable
+c:\users\gregm\source\repos\sequentialmatrixmultiplication\sequentialmatrixmultiplication\sequentialmatrixmultiplication.cpp(83): warning C4101: 'stop': unreferenced local variable
+  SequentialMatrixMultiplication.vcxproj -> C:\Users\gregm\source\repos\SequentialMatrixMultiplication\Debug\SequentialMatrixMultiplication.exe
