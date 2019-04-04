@@ -5,7 +5,7 @@
 #include <iostream>
 #include <random>
 #include <time.h>
-//#include <pthread.h>
+#include <pthread.h>
 
 #define NUM_THREADS 5
 
@@ -50,7 +50,7 @@ void printArrays(int array1[n][n], int array2[n][n], int arrayOut[n][n])
 		cout << "]\n";
 	}
 	cout << "]\n\n";
-}  //Prints the three arrays, In1 in2 and out
+}		//Prints the three arrays, In1 in2 and out
 
 void intialiseArray(int array[n][n]) {
 	for (int i = 0; i < n; i++)
@@ -61,7 +61,17 @@ void intialiseArray(int array[n][n]) {
 		}
 	}
 
-}	//intialises a random array of n x n size
+}		//intialises a random array of n x n size
+
+int calculateCellValue(int i, int j, int array1[n][n], int array2[n][n])
+{
+                        int value = 0;
+                        for (int k = 0; k < n; k++)
+                        {
+                                value += array1[i][k] * array2[k][j];
+                        }
+                        return value;
+}		//perform the calculation for a particualar cell
 
 void SequentialMatrixMultiplication(int array1[n][n], int array2[n][n], int arrayOut[n][n])
 {
@@ -70,19 +80,16 @@ void SequentialMatrixMultiplication(int array1[n][n], int array2[n][n], int arra
 	{
 		for (int j = 0; j < n; j++)
 		{
-			value = 0;
-			for (int k = 0; k < n; k++)
-			{
-				value += array1[i][k] * array2[k][j];
-			}
-			arrayOut[i][j] = value;
+			arrayOut[i][j] = calculateCellValue(i, j, array1, array2);
 		}
 	}
-}
+}		//performs the iteration throught the arrays
 
 int main()
 {
 	//int n = rand() % ((100 - 1) + 1) + 1; //not allowed in C++ language
+	
+	pthread_t threads[NUM_THREADS];
 
 	int inputArray1[n][n];
 	int inputArray2[n][n];
@@ -99,9 +106,9 @@ int main()
 		int stop_s = clock();
 
 		//printArrays(inputArray1, inputArray2, OutputArray);
-		cout << "Runtime is: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "ms" << endl;
+		cout << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << endl;
 	}
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+// g++ <file.cpp>
+// g++ -o <name> <file.cpp>

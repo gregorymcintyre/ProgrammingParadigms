@@ -6,7 +6,12 @@
 #include <random>
 #include <time.h>
 
-const int n = 100;
+const int n = 100000;
+        int inputArray1[n][n];
+        int inputArray2[n][n];
+        int OutputArray[n][n];
+
+
 
 void printArrays(int array1[n][n], int array2[n][n], int arrayOut[n][n])
 {
@@ -82,16 +87,16 @@ int main()
 {
 	clock_t start, stop;
 	//int n = rand() % ((100 - 1) + 1) + 1; //not allowed in C++ language
-	int inputArray1[n][n];
-	int inputArray2[n][n];
-	int OutputArray[n][n];
+//	int inputArray1[n][n];
+//	int inputArray2[n][n];
+//	int OutputArray[n][n];
 
 	for (int i = 0; i < 5; i++) {
 		intialiseArray(inputArray1);
 		intialiseArray(inputArray2);
 
 		int start_s = clock();
-		SequentialMatrixMultiplication(inputArray1, inputArray2, OutputArray);
+		//SequentialMatrixMultiplication(inputArray1, inputArray2, OutputArray);
 		int stop_s = clock();
 
 		//std::cout << "Runtime is: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "ms" << std::endl;
