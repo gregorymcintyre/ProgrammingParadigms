@@ -1,12 +1,12 @@
 // SequentialMatrixMultiplication.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include "pch.h"
+//#include "pch.h"
 #include <iostream>
 #include <random>
 #include <time.h>
 
-#define n 100000
+#define n 1000
 
 int inputArray1[n][n];
 int inputArray2[n][n];
@@ -95,7 +95,7 @@ int main()
 		intialiseArray(inputArray2);
 
 		int start_s = clock();
-		//SequentialMatrixMultiplication(inputArray1, inputArray2, OutputArray);
+		SequentialMatrixMultiplication(inputArray1, inputArray2, OutputArray);
 		int stop_s = clock();
 
 		//std::cout << "Runtime is: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "ms" << std::endl;
