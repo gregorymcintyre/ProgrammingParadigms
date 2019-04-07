@@ -6,12 +6,11 @@
 #include <random>
 #include <time.h>
 
-const int n = 100000;
-        int inputArray1[n][n];
-        int inputArray2[n][n];
-        int OutputArray[n][n];
+#define n 100000
 
-
+int inputArray1[n][n];
+int inputArray2[n][n];
+int OutputArray[n][n];
 
 void printArrays(int array1[n][n], int array2[n][n], int arrayOut[n][n])
 {
