@@ -132,6 +132,7 @@ int main(int argc, char *argv[]){
 
 	omp_set_num_threads(NUM_THREADS);
 
+	cout<<"Array size (N x N) is: "<<N<<endl;
 	intialiseArray(inputArray1);
 	intialiseArray(inputArray2);
 
