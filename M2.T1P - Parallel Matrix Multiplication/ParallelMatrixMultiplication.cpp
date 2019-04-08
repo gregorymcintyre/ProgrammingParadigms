@@ -12,9 +12,8 @@
 
 using namespace std;
 
-#define N 500
+#define N 1000
 //#define NUM_THREADS 2
-
 //int N;
 int NUM_THREADS;
 
@@ -76,6 +75,10 @@ void *pthreadMatrixMultiplication(void *threadid)
 	int start = tid * range;
 	int end = start + range;
 
+	//pthread_mutex_lock(&mutx);
+	//cout<<tid<<":"<<start<<"-"<<end<<endl;
+	//pthread_mutex_unlock(&mutx);
+
 	for (int i = start ; i < end ; i++)
 	{
 		for (int j = 0; j < N; j++)
@@ -86,13 +89,13 @@ void *pthreadMatrixMultiplication(void *threadid)
 				value += inputArray1[i][k] * inputArray2[k][j];
 			}
 
-			pthread_mutex_lock(&mutx);
+			//pthread_mutex_lock(&mutx);
 			outputArray[i][j] = value;
-			pthread_mutex_unlock(&mutx);
+			//pthread_mutex_unlock(&mutx);
 		}
 	}
+	//cout<<"Done"<<endl;
 	pthread_exit(NULL);
-
 }
 
 void OpenmpMatrixMultiplication()
@@ -127,6 +130,8 @@ int main(int argc, char *argv[]){
 	pthread_t threads[NUM_THREADS];
 	pthread_mutex_init(&mutx, NULL);
 
+	omp_set_num_threads(NUM_THREADS);
+
 	intialiseArray(inputArray1);
 	intialiseArray(inputArray2);
 
@@ -152,6 +157,8 @@ int main(int argc, char *argv[]){
 
 	double time_elapsed = timeofday_end - timeofday_start;
 	cout<<time_elapsed<<"ms"<<endl;
+	//cout << "Output Array"<<endl;
+	//printArrays(outputArray);
 
 	cout<<"pthread Matrix Multiplication with " << NUM_THREADS << " threads.\tTime elapsed: ";
 
@@ -172,6 +179,8 @@ int main(int argc, char *argv[]){
 
 	time_elapsed = timeofday_end - timeofday_start;
 	cout<<time_elapsed<<"ms"<<endl;
+	//cout << "Output Array"<<endl;
+	//printArrays(outputArray);
 
 	cout<<"OpenMP Matrix Multiplication with " << NUM_THREADS << " threads.\tTime elapsed: ";
 
@@ -186,7 +195,6 @@ int main(int argc, char *argv[]){
 
 	time_elapsed = timeofday_end - timeofday_start;
 	cout<<time_elapsed<<"ms"<<endl;
-
 	//cout << "Output Array"<<endl;
 	//printArrays(outputArray);
 
