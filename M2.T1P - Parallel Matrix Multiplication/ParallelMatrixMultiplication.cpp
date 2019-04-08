@@ -16,9 +16,9 @@
 using namespace std;
 
 #define N 2000
-//#define NUM_THREADS 2
+#define NUM_THREADS 2
 //int N;
-int NUM_THREADS;
+//int NUM_THREADS;
 
 pthread_mutex_t mutx;
 
