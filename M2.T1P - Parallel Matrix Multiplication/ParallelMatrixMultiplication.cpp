@@ -1,7 +1,10 @@
-// SequentialMatrixMultiplication.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
-//#include "pch.h"
+/* SequentialMatrixMultiplication.cpp
+ * Greg McIntyre
+ * 8/4/19
+ *
+ * This program creates 2 random arrays of n size and multiplies them together in a sequential, pthread and OpenMP method.
+ */
+#include "pch.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -33,7 +36,7 @@ void intialiseArray(int array[N][N]) {
 		}
 	}
 	cout<<"complete"<<endl;
-}
+}		//intialises array with random values, uses the N global variable
 
 void printArrays(int array[N][N]){
 	cout <<"[";
@@ -46,7 +49,7 @@ void printArrays(int array[N][N]){
 		std::cout << "]\n";
 	}
 	std::cout << "]\n\n";
-}
+}		//prints array to console
 
 void SequentialMatrixMultiplication()
 {
@@ -64,7 +67,7 @@ void SequentialMatrixMultiplication()
 
 		}
 	}
-}
+}		//performs a sequential matrix mutiplication
 
 void *pthreadMatrixMultiplication(void *threadid)
 {
@@ -96,7 +99,7 @@ void *pthreadMatrixMultiplication(void *threadid)
 	}
 	//cout<<"Done"<<endl;
 	pthread_exit(NULL);
-}
+}		//performs a threaded matrix multiplication using the global NUM_THREADS value
 
 void OpenmpMatrixMultiplication()
 {
@@ -119,11 +122,11 @@ void OpenmpMatrixMultiplication()
 			}
 		}
 	}
-}
+}		//performs a threaded matrix multiplication using OpenMP 
 
 int main(int argc, char *argv[]){
 
-	NUM_THREADS = atoi(argv[1]);
+	NUM_THREADS = atoi(argv[1]);		//pull argv value for threads
 	//N = atoi(argv[2]);
 
 	struct timeval timecheck;
