@@ -24,7 +24,7 @@ g++ -fopenmp ComplexThreading.cpp qSort.o
 
 using namespace std;
 
-#define LENGTH 250000
+#define LENGTH 600000
 int Array[LENGTH];
 int NUM_THREADS = 2;
 int P;
