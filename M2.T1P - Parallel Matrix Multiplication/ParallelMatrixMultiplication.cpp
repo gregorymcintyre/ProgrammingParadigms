@@ -12,7 +12,7 @@
 
 using namespace std;
 
-#define N 1000
+#define N 2000
 //#define NUM_THREADS 2
 //int N;
 int NUM_THREADS;
@@ -102,6 +102,7 @@ void OpenmpMatrixMultiplication()
 {
 	#pragma omp parallel
 	{
+		//cout<<omp_get_thread_num()<<endl;
 		int value;
 		#pragma omp for
 		for (int i = 0; i < N; i++)
