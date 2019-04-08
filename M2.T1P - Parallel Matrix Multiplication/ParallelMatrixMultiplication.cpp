@@ -4,7 +4,7 @@
  *
  * This program creates 2 random arrays of n size and multiplies them together in a sequential, pthread and OpenMP method.
  */
-#include "pch.h"
+//#include "pch.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -15,10 +15,10 @@
 
 using namespace std;
 
-#define N 2000
-#define NUM_THREADS 2
+#define N 10
+//#define NUM_THREADS 2
 //int N;
-//int NUM_THREADS;
+int NUM_THREADS;
 
 pthread_mutex_t mutx;
 
@@ -125,6 +125,11 @@ void OpenmpMatrixMultiplication()
 }		//performs a threaded matrix multiplication using OpenMP 
 
 int main(int argc, char *argv[]){
+
+	if(argc < 2){
+		cout<<"please restart the application with an argument for the desired number of threads (consider hardware maximum)"<<endl;
+		exit(-1);
+	}
 
 	NUM_THREADS = atoi(argv[1]);		//pull argv value for threads
 	//N = atoi(argv[2]);
