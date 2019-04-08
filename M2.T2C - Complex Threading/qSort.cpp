@@ -1,4 +1,13 @@
-/* https://gsamaras.wordpress.com/code/quicksort-c/
+/* qSort.cpp
+ *
+ * required simple header file qSort.h 
+ * 
+ * foundation code from https://gsamaras.wordpress.com/code/quicksort-c/
+ *
+ * to make for ComplexThreading.cpp:
+
+$g++ -c qSort.cpp
+
 */
 
 #include <iostream>

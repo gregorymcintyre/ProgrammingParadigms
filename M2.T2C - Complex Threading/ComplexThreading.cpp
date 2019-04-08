@@ -1,7 +1,15 @@
-/*
-g++
-g++ -fopenmp ComplexThreading.cpp qSort.o
+/* ComplexThreading.cpp
+ * Greg McIntyre
+ * 9/4/2019
+ * 
+ * This program generates a random array of LENGTH and sorts it seqentualy and in parallel
+ * this program requires qSort.o to compile, makefile is included, use the comman below for simplest build and run
 
+ $make all run
+
+  * make command
+
+g++ -fopenmp ComplexThreading.cpp qSort.o
 
 */
 
@@ -29,7 +37,7 @@ void initArray(int array[LENGTH]){
 	}
 	cout<<"Done."<<endl;
 
-}
+}			//intialises array with random values
 
 void printArray(int array[LENGTH]){
 	cout<<"[";
@@ -37,7 +45,7 @@ void printArray(int array[LENGTH]){
 		cout<<array[i]<<", ";
 	}
 	cout<<"]\n";
-}
+}			//prints array to the console
 
 void openmpQuickSort( int array[], int first, int last ) 
 {
@@ -57,7 +65,7 @@ void openmpQuickSort( int array[], int first, int last )
         	//cout<<"2"<<endl;
     	//}
     }
-}
+}		//non functioning OpenMP attempt causes compiler error
 
 void* pthread_QuickSort(void *threadid){
 
@@ -90,28 +98,21 @@ void* pthread_QuickSort(void *threadid){
 	        quickSort(Array, pivotElement+1, last);
 	    }
 	}
-}
+}		//Generates values for the threads to begin the recursion
 
 
 void pthreadQuickSort(){
 
 	pthread_t threads[NUM_THREADS];
 
-	int pivotElement;
-	int first = 0;
-	int last = LENGTH-1;
-
-    if(first < last)
-    {
-    	P = pivot(Array, first, last);			//global P
+    	P = pivot(Array, 0, LENGTH-1);			//global P
 
 		for (long tid = 0; tid < NUM_THREADS; tid++) 
 			pthread_create(&threads[tid], NULL, pthread_QuickSort, (void *)tid);
 
 		for (long tid = 0; tid < NUM_THREADS; tid++) 
 			pthread_join(threads[tid], NULL); 
-	}
-}
+}		// identification of the piviot and creation of the thread
 
 int main(int argc, char *argv[]){
 
