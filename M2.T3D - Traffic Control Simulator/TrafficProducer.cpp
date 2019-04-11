@@ -10,6 +10,7 @@
 #include <random>
 #include <ctime>
 #include <fstream>
+#include <time.h>
 
 using namespace std;
 
@@ -18,18 +19,18 @@ using namespace std;
 int main(){
 
     string output;
-    time_t result = time(nullptr);
-    string dateStamp = asctime(gmtime(&result));
+    
+    time_t rawTime;
+    time(&rawTime);
 
-    if ( dateStamp.size() > 0 && dateStamp[dateStamp.length()-1] == '\n' ) 
-        dateStamp.resize( dateStamp.length()-1 );           //removes \n from end of stamp
+    srand (time(NULL));
 
     for (int i = 1 ; i <= NUM_LIGHTS ; i++){
         
-        output+= dateStamp + ";";
-        output+= to_string(i) + ";";
+        output += to_string(rawTime) + " ";
+        output+= to_string(i) + " ";
         int cars = rand() % ((10 - 1) + 1) + 1;
-        output+= to_string(cars) + ";\n";                   //log entry std::stamp ; light no. ; number of cars (random)
+        output+= to_string(cars) + " \n";                   //log entry std::stamp ; light no. ; number of cars (random)
     }
 
     fstream log("log.txt", ios::app);                       //append to log file
@@ -37,9 +38,8 @@ int main(){
         cout<<"Error: Log file not found"<<endl;
     } else {
         log<<output;
-        cout<<"log.txt has been updated at "<<dateStamp<<endl;
+        cout<<output;
+        cout<<"log.txt has been updated at "<<ctime(&rawTime)<<endl;
     }
-
-    //cout<<output<<endl;
     return 0;
 }
