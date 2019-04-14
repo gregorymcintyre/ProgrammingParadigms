@@ -24,12 +24,13 @@ g++ -fopenmp ComplexThreading.cpp qSort.o
 
 using namespace std;
 
-#define LENGTH 600000
+#define LENGTH 10  //60000
 int Array[LENGTH];
 int NUM_THREADS = 2;
 int P;
 
 void initArray(int array[LENGTH]){
+	srand (time(NULL));
 	cout<<"Using Array of size: "<<LENGTH<<endl;
 	cout<<"Initialising Array with random values...\t";
 	for (int i = 0 ; i < LENGTH ; i++){
@@ -139,7 +140,7 @@ int main(int argc, char *argv[]){
 
 	
 	initArray(Array);
-	//printArray(Array);
+	printArray(Array);
 	cout<<"pthread QuickSort.\t\t\t\tTime elapsed: ";
 
 	gettimeofday(&timecheck, NULL);
@@ -148,13 +149,15 @@ int main(int argc, char *argv[]){
 
 	//pthread_QuickSort((void*)NULL);
 	pthreadQuickSort();
-	//printArray(Array);
+	
 
 	gettimeofday(&timecheck, NULL);
 	timeofday_end = (long)timecheck.tv_sec * 1000 + (long)timecheck.tv_usec /1000;
 
 	time_elapsed = timeofday_end - timeofday_start;
 	cout<<time_elapsed<<"ms"<<endl;
+
+	printArray(Array);
 
 	return 0;
 }
