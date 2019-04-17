@@ -15,7 +15,7 @@
 
 using namespace std;
 
-#define N 10
+#define N 1000
 //#define NUM_THREADS 2
 //int N;
 int NUM_THREADS;
@@ -103,21 +103,28 @@ void *pthreadMatrixMultiplication(void *threadid)
 
 void OpenmpMatrixMultiplication()
 {
-	#pragma omp parallel
+	int value;
+	//#pragma omp parallel num_threads(NUM_THREADS) private(value)					//uncheck with line 119 also unchecked
+	//i could use a shared variable for the array was not global
 	{
 		//cout<<omp_get_thread_num()<<endl;
-		int value;
-		#pragma omp for
+		//int value;
+		//#pragma omp for
 		for (int i = 0; i < N; i++)
 		{
 			for (int j = 0; j < N; j++)
-			{
+			{	
+
 				value = 0;
+				//#pragma omp for 					//uncheck with line 107 also unchecked
+				#pragma omp parallel for reduction(+: value) num_threads(NUM_THREADS)
 				for (int k = 0; k < N; k++)
 				{
 					value += inputArray1[i][k] * inputArray2[k][j];
 				}
-					outputArray[i][j] = value;
+
+				#pragma omp atmoic update			//not really required
+				outputArray[i][j] = value;
 
 			}
 		}
