@@ -103,27 +103,28 @@ void *pthreadMatrixMultiplication(void *threadid)
 
 void OpenmpMatrixMultiplication()
 {
-	int value;
+	//int value;
 	//#pragma omp parallel num_threads(NUM_THREADS) private(value)					//uncheck with line 119 also unchecked
 	//i could use a shared variable for the array was not global
+	#pragma omp parallel
 	{
 		//cout<<omp_get_thread_num()<<endl;
 		//int value;
-		//#pragma omp for
+		#pragma omp for
 		for (int i = 0; i < N; i++)
 		{
 			for (int j = 0; j < N; j++)
 			{	
 
-				value = 0;
+				int value = 0;
 				//#pragma omp for 					//uncheck with line 107 also unchecked
-				#pragma omp parallel for reduction(+: value) num_threads(NUM_THREADS)
+				//#pragma omp parallel for reduction(+: value) num_threads(NUM_THREADS)
 				for (int k = 0; k < N; k++)
 				{
 					value += inputArray1[i][k] * inputArray2[k][j];
 				}
 
-				#pragma omp atmoic update			//not really required
+				//#pragma omp atmoic update			//not really required
 				outputArray[i][j] = value;
 
 			}
