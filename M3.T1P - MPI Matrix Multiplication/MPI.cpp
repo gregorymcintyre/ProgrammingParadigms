@@ -6,8 +6,8 @@
  * $ mpicc MPI.cpp
  * 
  * Run
- * $ mpirun -np 5 --hostfile ~/Desktop/Slave.list
- * $ mpirun -np 5 ./a.out
+ * $ mpirun -np 4 --hostfile ~/Desktop/Slave.list
+ * $ mpirun -np 4 ./a.out
  * 
  */
 
@@ -23,19 +23,28 @@ using namespace std;
 void intialiseArray(int array[N][N]);
 void printArrays(int array[N][N]);
 void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N][N]);
+//void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N*N]);
+
+void printOutput(int outputArray[N*N]){
+    for (int i = 0 ; i < N*N; i++){
+        printf(" %d :", outputArray[i]);
+    }
+    
+}
+
 
 int main(){
     MPI_Init(NULL, NULL);
 
     int np = 0;
     MPI_Comm_size(MPI_COMM_WORLD, &np);     //number of nodes
-    //printf("%d\n", np);
 
     int rank = 0;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    //printf("%d\t", rank);
 
-    int inputArray1[N][N], inputArray2[N][N], outputArray[N][N]={{0}};
+    int inputArray1[N][N], inputArray2[N][N];
+    int outputArray[N][N]={{0}};
+    //int outputArray[N*N]={0};
 
     if (rank==0) {
         intialiseArray(inputArray1);
@@ -58,17 +67,13 @@ int main(){
     //    MPI_Scatter(&inputArray1, N*N/np, MPI_INT, &inputArray1, MPI_INT, 0, MPI_COMM_WORLD)
     //}
 
-    //multi plic
-
-    //int MPI_Gather(const void *sendbuf, int sendcount, MPI_Datatype sendtype, void *recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm)
-
     MatrixMultiplication(np, rank, inputArray1, inputArray2, outputArray);
-    //printArrays(outputArray);
-
-
-
+    
+    //int MPI_Gather(const void *sendbuf, int sendcount, MPI_Datatype sendtype, void *recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm)
+    //MPI_Gather(&outputArray, range*N, MPI_INT, outputArray, range*N, MPI_INT, 0, MPI_COMM_WORLD);
+    
     if(rank==0)printArrays(outputArray);
-
+    //if(rank==0)printOutput(outputArray);
 
     MPI_Finalize();
     return 0;
@@ -80,7 +85,7 @@ void intialiseArray(int array[N][N]) {
 	{
 		for (int j = 0; j < N; j++)
 		{
-			array[i][j] = rand() % ((100 - 1) + 1) + 1;
+			array[i][j] = rand() % ((10 - 1) + 1) + 1;
 		}
 	}
 	printf("complete\n");
@@ -100,6 +105,7 @@ void printArrays(int array[N][N]){
 }		//prints array to console
 
 void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N][N]){
+//void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N*N]){
     long value;
 
     int range = N/np;
@@ -110,18 +116,25 @@ void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArra
 
     for (int i = start ; i < end ; i++)
 	{
+        int counter=0;
 		for (int j = 0; j < N; j++)
 		{
 			value = 0;
+
 			for (int k = 0; k < N; k++)
 			{
 				value += inputArray1[i][k] * inputArray2[k][j];
 			}
-			outputArray[i][j] = value;
+			outputArray[counter][j] = value;
+            //outputArray[counter] = value;
 		}
+        counter++;
 	}
     printArrays(outputArray);
 
+    //int MPI_Barrier( MPI_Comm comm )
+    MPI_Barrier(MPI_COMM_WORLD);
+
     //int MPI_Gather(const void *sendbuf, int sendcount, MPI_Datatype sendtype, void *recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm)
-    //MPI_Gather(&outputArray, range, MPI_INT, &outputArray, 16, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Gather(&outputArray, range*N, MPI_INT, outputArray, range*N, MPI_INT, 0, MPI_COMM_WORLD);
 }
