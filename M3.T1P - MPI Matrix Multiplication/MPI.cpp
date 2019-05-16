@@ -25,8 +25,8 @@ void printArrays(int array[N][N]);
 void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N][N]);
 //void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N*N]);
 
-void printOutput(int outputArray[N*N]){
-    for (int i = 0 ; i < N*N; i++){
+void printOutput(int outputArray[N]){
+    for (int i = 0 ; i < N; i++){
         printf(" %d :", outputArray[i]);
     }
     
@@ -112,6 +112,10 @@ void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArra
 	int start = rank * range;
 	int end = start + range;
 
+    //int buffArray[N*np]={0};
+    //if (rank==0) int buffArray[N*np]={0};
+    //else int buffArray[N]={0};
+
     //printf("%d:%d-%d\n", rank, start, end);
 
     for (int i = start ; i < end ; i++)
@@ -127,14 +131,20 @@ void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArra
 			}
 			outputArray[counter][j] = value;
             //outputArray[counter] = value;
+            //buffArray[counter]=value;
 		}
         counter++;
 	}
     printArrays(outputArray);
 
+    //printOutput(buffArray);
+
     //int MPI_Barrier( MPI_Comm comm )
     MPI_Barrier(MPI_COMM_WORLD);
-
     //int MPI_Gather(const void *sendbuf, int sendcount, MPI_Datatype sendtype, void *recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm)
-    MPI_Gather(&outputArray, range*N, MPI_INT, outputArray, range*N, MPI_INT, 0, MPI_COMM_WORLD);
+    //MPI_Gather(&buffArray, 4, MPI_INT, buffArray, 4, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Gather(&outputArray[0], range*N, MPI_INT, outputArray, range*N, MPI_INT, 0, MPI_COMM_WORLD);
+
+    //if (rank==0) printOutput(buffArray);
+    
 }
