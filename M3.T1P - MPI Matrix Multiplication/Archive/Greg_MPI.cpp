@@ -15,10 +15,8 @@
 #include<stdlib.h>
 #include<unistd.h>
 #include<stdio.h>
-#include <sys/time.h>
-#include <time.h>
 
-#define N 100
+#define N 4
 
 using namespace std;
 
@@ -26,7 +24,6 @@ void intialiseArray(int array[N][N]);
 void printArrays(int array[N][N]);
 void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N][N]);
 //void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N*N]);
-struct timeval timecheck;
 
 void printOutput(int outputArray[N]){
     for (int i = 0 ; i < N; i++){
@@ -46,26 +43,15 @@ int main(){
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     int inputArray1[N][N], inputArray2[N][N];
-    int outputArray[N][N]={{0}};
-    //int outputArray[N*N]={0};
-
+    int outputArray[N][N];
+  
     if (rank==0) {
         intialiseArray(inputArray1);
         intialiseArray(inputArray2);
+        printArrays(inputArray1);
+        printArrays(inputArray2);
 
-        //printArrays(inputArray1);
-        //printArrays(inputArray2);
-    }else{
-        //printArrays(outputArray);
-    }
-
-    //Timer Start
-    if (rank == 0){
-        printf("MPI Matrix Multiplication.\n");
-    }
-
-    gettimeofday(&timecheck, NULL);
-	long timeofday_start = (long)timecheck.tv_sec * 1000 + (long)timecheck.tv_usec /1000;
+    } 
 
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Bcast(&inputArray1, N*N, MPI_INT, 0, MPI_COMM_WORLD);
@@ -74,20 +60,9 @@ int main(){
     MPI_Barrier(MPI_COMM_WORLD);
     MatrixMultiplication(np, rank, inputArray1, inputArray2, outputArray);
     MPI_Barrier(MPI_COMM_WORLD);
-    
-    //if(rank==0)printArrays(outputArray);
-    
+    if(rank==0)printArrays(outputArray);
+   
     MPI_Finalize();
-
-    //Timer end
-    gettimeofday(&timecheck, NULL);
-	long timeofday_end = (long)timecheck.tv_sec * 1000 + (long)timecheck.tv_usec /1000;
-	double time_elapsed = timeofday_end - timeofday_start;
-	
-    if (rank == 0){
-        printf("\t\tTime elapsed: %f ms\n", time_elapsed);
-    }
-
     return 0;
 }
 
@@ -97,14 +72,13 @@ void intialiseArray(int array[N][N]) {
 	{
 		for (int j = 0; j < N; j++)
 		{
-			array[i][j] = rand() % ((10 - 1) + 1) + 1;
+			array[i][j] = rand() % 10;
 		}
 	}
 	printf("complete\n");
 }		//intialises array with random values, uses the N global variable
 
 void printArrays(int array[N][N]){
-	printf("[");
 	for (int i = 0; i < N; i++) {
 		printf("[");
 		for (int j = 0; j < N; j++) {
@@ -113,7 +87,8 @@ void printArrays(int array[N][N]){
 		}
 		printf("]\n");
 	}
-	printf("]\n\n");
+	printf("\n");
+	
 }		//prints array to console
 
 void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N][N]){
@@ -138,4 +113,7 @@ void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArra
    
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Gather(buffArray, range * N, MPI_INT, outputArray, range * N, MPI_INT, 0, MPI_COMM_WORLD);
+  
+  
+    
 }

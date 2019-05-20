@@ -18,13 +18,13 @@
 #include <sys/time.h>
 #include <time.h>
 
-#define N 100
+#define N 20
 
 using namespace std;
 
 void intialiseArray(int array[N][N]);
 void printArrays(int array[N][N]);
-void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N][N]);
+void openmpMatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N][N]);
 //void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N*N]);
 struct timeval timecheck;
 
@@ -61,7 +61,7 @@ int main(){
 
     //Timer Start
     if (rank == 0){
-        printf("MPI Matrix Multiplication.\n");
+        printf("OpenMP MPI Matrix Multiplication.\n");
     }
 
     gettimeofday(&timecheck, NULL);
@@ -72,7 +72,7 @@ int main(){
     MPI_Bcast(&inputArray2, N*N, MPI_INT, 0, MPI_COMM_WORLD);
 
     MPI_Barrier(MPI_COMM_WORLD);
-    MatrixMultiplication(np, rank, inputArray1, inputArray2, outputArray);
+    openmpMatrixMultiplication(np, rank, inputArray1, inputArray2, outputArray);
     MPI_Barrier(MPI_COMM_WORLD);
     
     //if(rank==0)printArrays(outputArray);
@@ -116,13 +116,16 @@ void printArrays(int array[N][N]){
 	printf("]\n\n");
 }		//prints array to console
 
-void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N][N]){
+void openmpMatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N][N]){
     long value;
     int range = N/np;
 	int start = rank * range;
 	int end = start + range;
     int buffArray[range][N]={0};
   
+#pragma omp parallel num_treads(4)
+{  
+    #pragma omp for
     for (int i = start ; i < end ; i++)
 	{
 		for (int j = 0; j < N; j++)
@@ -135,7 +138,7 @@ void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArra
             buffArray[i - start][j]=value;
 		}
 	}
-   
+}
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Gather(buffArray, range * N, MPI_INT, outputArray, range * N, MPI_INT, 0, MPI_COMM_WORLD);
 }
