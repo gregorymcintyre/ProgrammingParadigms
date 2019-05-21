@@ -1,9 +1,9 @@
 /* MPI
  * Greg McIntyre
- * 15/5/19
+ * 21/5/19
  * 
  * Compile with 
- * $ mpicc MPI.cpp
+ * $ mpicxx openmpMPI.cpp -fopenmp
  * 
  * Run
  * $ mpirun -np 4 --hostfile ~/Desktop/Slave.list
@@ -15,10 +15,11 @@
 #include<stdlib.h>
 #include<unistd.h>
 #include<stdio.h>
-#include <sys/time.h>
-#include <time.h>
+#include<sys/time.h>
+#include<time.h>
+#include<omp.h>
 
-#define N 20
+#define N 800
 
 using namespace std;
 
@@ -123,7 +124,7 @@ void openmpMatrixMultiplication(int np, int rank, int inputArray1[N][N], int inp
 	int end = start + range;
     int buffArray[range][N]={0};
   
-#pragma omp parallel num_treads(4)
+#pragma omp parallel
 {  
     #pragma omp for
     for (int i = start ; i < end ; i++)

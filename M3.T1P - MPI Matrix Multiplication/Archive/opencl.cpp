@@ -1,5 +1,7 @@
+//$ g++ opencl.cpp -lOpenCL
+
 #include<stdio.h>
-#include <stdlib.h>
+#include<stdlib.h>
 #include<CL/cl.h>
 #define MAX 8
 

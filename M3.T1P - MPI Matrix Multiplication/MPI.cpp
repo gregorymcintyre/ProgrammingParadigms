@@ -18,7 +18,7 @@
 #include <sys/time.h>
 #include <time.h>
 
-#define N 100
+#define N 900
 
 using namespace std;
 
