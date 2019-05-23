@@ -20,13 +20,13 @@
 #include<omp.h>
 #include<CL/cl.h>
 
-#define N 8
+#define N 800
 
 using namespace std;
 
 void intialiseArray(int array[N][N]);
 void printArrays(int array[N][N]);
-void openmpMatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N][N]);
+void openclMatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N][N]);
 //void MatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N*N]);
 struct timeval timecheck;
 
@@ -67,6 +67,11 @@ void printOutput(int outputArray[N]){
 
 int main(){
 
+    init(a);
+    init(b);
+    matrix_mul(a,b,c);
+    //print_matrix(c);
+
     setup_openCL_device_context_queue_kernel();
     setup_kernel_memory();
     copy_kernel_args();
@@ -83,6 +88,8 @@ int main(){
     int outputArray[N][N]={{0}};
     //int outputArray[N*N]={0};
 
+
+
     if (rank==0) {
         intialiseArray(inputArray1);
         intialiseArray(inputArray2);
@@ -95,7 +102,7 @@ int main(){
 
     //Timer Start
     if (rank == 0){
-        printf("OpenMP MPI Matrix Multiplication.\n");
+        printf("OpenCL MPI Matrix Multiplication.\n");
     }
 
     gettimeofday(&timecheck, NULL);
@@ -106,7 +113,7 @@ int main(){
     MPI_Bcast(&inputArray2, N*N, MPI_INT, 0, MPI_COMM_WORLD);
 
     MPI_Barrier(MPI_COMM_WORLD);
-    openmpMatrixMultiplication(np, rank, inputArray1, inputArray2, outputArray);
+    openclMatrixMultiplication(np, rank, inputArray1, inputArray2, outputArray);
     MPI_Barrier(MPI_COMM_WORLD);
     
     //if(rank==0)printArrays(outputArray);
@@ -150,7 +157,7 @@ void printArrays(int array[N][N]){
 	printf("]\n\n");
 }		//prints array to console
 
-void openmpMatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N][N]){
+void openclMatrixMultiplication(int np, int rank, int inputArray1[N][N], int inputArray2[N][N], int outputArray[N][N]){
     long value;
     int range = N/np;
 	int start = rank * range;
@@ -162,7 +169,7 @@ void openmpMatrixMultiplication(int np, int rank, int inputArray1[N][N], int inp
 
     //copying data from the device back to host c matrix
     clEnqueueReadBuffer(queue, bufC, CL_TRUE, 0, N * N*sizeof(int), c, 0, NULL, NULL);
-    print_matrix(c);
+    //print_matrix(c);
    
     free_memory();
 
@@ -225,7 +232,7 @@ void setup_openCL_device_context_queue_kernel() {
       exit(1);   
     };
 
-    kernel = clCreateKernel(program, "matrix_mult", &err);
+    kernel = clCreateKernel(program, "multiply_matrices", &err);
    if(err < 0) {
       perror("Couldn't create a kernel");
       printf("error =%d", err);
